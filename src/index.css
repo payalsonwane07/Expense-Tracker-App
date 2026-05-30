@@ -1,111 +1,319 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+:root {
+  color-scheme: dark;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  background: #0D0F1C;
+  color: #E8EAFF;
+  font-size: 16px;
+  line-height: 1.5;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+html, body, #root {
+  min-height: 100%;
 }
 
 body {
+  background: #0D0F1C;
+  color: #E8EAFF;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input, select {
+  background: #1E2235;
+  border: 1px solid #252A45;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #E8EAFF;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+  color-scheme: dark;
+}
+
+input:focus,
+select:focus {
+  border-color: #8B5CF6;
+}
+
+body {
+  padding: 0;
   margin: 0;
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
+  min-height: 100vh;
+  background: #0D0F1C;
+}
+
+.AppShell {
+  min-height: 100vh;
+  background: #0D0F1C;
+  padding: 2rem 1rem;
+}
+
+.PageContainer {
+  max-width: 1120px;
   margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+}
+
+.SectionGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .SectionGrid.columns-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.Card {
+  background: #111827;
+  border: 1px solid #252A45;
+  border-radius: 24px;
+  padding: 1.5rem;
+}
+
+.CardProminent {
+  background: #111827;
+  border: 1px solid #252A45;
+  border-radius: 24px;
+  padding: 2rem;
+}
+
+.Heading {
+  font-family: 'Playfair Display', serif;
+  color: #F8FAFF;
+}
+
+.HeadingBalance {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  margin: 0.25rem 0 0;
+  letter-spacing: -0.04em;
+}
+
+.HeadingSection {
+  margin: 0 0 1rem;
+}
+
+.TextMuted {
+  color: #8B93B5;
+}
+
+.GridTwo {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .GridTwo.cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.StatCard {
+  background: #111827;
+  border: 1px solid #252A45;
+  border-radius: 20px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.StatAccent {
+  width: 0.5rem;
+  border-radius: 9999px;
+}
+
+.StatLabel {
+  color: #8B93B5;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  margin-bottom: 0.85rem;
+}
+
+.StatValue {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.StatAccent.green { background: #22C55E; }
+.StatAccent.red { background: #EF4444; }
+
+.ToolPanel {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  gap: 1rem;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.ToggleGroup {
+  display: flex;
+  gap: 0.5rem;
+  background: #141828;
+  padding: 0.35rem;
+  border-radius: 16px;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+.ToggleButton {
+  flex: 1;
+  border: none;
+  border-radius: 14px;
+  padding: 0.9rem 0;
+  font-weight: 600;
+  color: #8B93B5;
+  background: transparent;
+}
+
+.ToggleButton.active {
+  color: #fff;
+}
+
+.ToggleButton.income.active {
+  background: linear-gradient(135deg, #22C55E, #16A34A);
+}
+
+.ToggleButton.expense.active {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+}
+
+.TrackerForm {
+  display: grid;
+  gap: 1rem;
+}
+
+.ButtonPrimary {
+  border: none;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ButtonPrimary.income { background: linear-gradient(135deg, #22C55E, #16A34A); }
+.ButtonPrimary.expense { background: linear-gradient(135deg, #EF4444, #DC2626); }
+
+.TransactionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.TransactionSearch {
+  margin-bottom: 1rem;
+}
+
+.ChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.Chip {
+  border: 1px solid #252A45;
+  border-radius: 9999px;
+  background: transparent;
+  color: #8B93B5;
+  font-size: 0.85rem;
+  padding: 0.65rem 1rem;
+}
+
+.Chip.active {
+  background: rgba(139, 92, 246, 0.15);
+  color: #8B5CF6;
+  border-color: rgba(139, 92, 246, 0.35);
+}
+
+.EmptyState {
+  text-align: center;
+  color: #8B93B5;
+  padding: 3rem 0;
+}
+
+.TransactionRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: #111827;
+  border: 1px solid #252A45;
+  border-radius: 18px;
+  padding: 1rem 1rem;
+}
+
+.TransactionBadge {
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.TransactionBadge.income { background: rgba(34,197,94,0.12); color: #22C55E; }
+.TransactionBadge.expense { background: rgba(239,68,68,0.12); color: #EF4444; }
+
+.TransactionAmount {
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.TransactionAmount.income { color: #22C55E; }
+.TransactionAmount.expense { color: #EF4444; }
+
+.TransactionMeta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  color: #8B93B5;
+  font-size: 0.82rem;
+}
+
+.TransactionText {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.TransactionRow .txn-date {
+  font-size: 0.82rem;
+  color: #8B93B5;
+}
+
+.DeleteButton {
+  background: none;
+  border: none;
+  color: #8B93B5;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .SectionGrid.columns-5 {
+    grid-template-columns: 1fr;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+  .GridTwo.cols-2 {
+    grid-template-columns: 1fr;
   }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  .TransactionHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
