@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import SummaryCharts from './components/SummaryCharts'
 
 // Single-file Expense Tracker with theme toggle and animations
 
@@ -327,6 +328,10 @@ export default function App() {
             </div>
           </div>
         </div>
+        </div>
+
+        {/* Charts placed below the summary cards */}
+        <SummaryCharts txns={txns} mode={mode} selectedMonth={selectedMonth} selectedYear={selectedYear} colors={colors} />
 
         <div data-gridcols style={S.gridCols5}>
           <div style={{ gridColumn: 'span 2' }}>
