@@ -287,9 +287,11 @@ export default function App() {
 
           <div style={S.toggleWrap}>
             <div style={{ color: colors.muted, fontSize: 13, marginRight: 8 }}>{/* theme label */}</div>
-            </div>
+            <div
+              role="button"
+              aria-label="Toggle theme"
+              onClick={toggleTheme}
               style={{ display: 'inline-flex', alignItems: 'center' }}
-            {/* Charts placed below the summary cards */}
             >
               <div className="toggle-track" style={{ background: colors.card, border: `1px solid ${colors.border}`, transition: 'background 0.35s, border-color 0.35s', padding: 6 }}>
                 <div style={{ width: 24 }}></div>
