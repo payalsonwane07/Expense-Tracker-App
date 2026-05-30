@@ -79,6 +79,11 @@ export default function App() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10))
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
+  // Month/Year selection and dashboard mode
+  const now = new Date()
+  const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1) // 1-12
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear())
+  const [mode, setMode] = useState('all') // 'all' | 'month'
 
   const [newlyAdded, setNewlyAdded] = useState(null)
   const removingRef = useRef(new Set())
@@ -141,8 +146,23 @@ export default function App() {
     storage.set(txns)
   }, [txns, loaded])
 
-  const income = useMemo(() => txns.filter((t) => t.type === 'income').reduce((s, t) => s + Number(t.amount || 0), 0), [txns])
-  const expense = useMemo(() => txns.filter((t) => t.type === 'expense').reduce((s, t) => s + Number(t.amount || 0), 0), [txns])
+  // All-time totals
+  const incomeAll = useMemo(() => txns.filter((t) => t.type === 'income').reduce((s, t) => s + Number(t.amount || 0), 0), [txns])
+  const expenseAll = useMemo(() => txns.filter((t) => t.type === 'expense').reduce((s, t) => s + Number(t.amount || 0), 0), [txns])
+
+  // Transactions visible according to current mode and selected month/year
+  const txnsVisibleByMonth = useMemo(() => {
+    return txns.filter((t) => {
+      if (!t.date) return true
+      const d = new Date(t.date)
+      const m = d.getMonth() + 1
+      const y = d.getFullYear()
+      return m === Number(selectedMonth) && y === Number(selectedYear)
+    })
+  }, [txns, selectedMonth, selectedYear])
+
+  const income = useMemo(() => (mode === 'all' ? incomeAll : txnsVisibleByMonth.filter((t) => t.type === 'income').reduce((s, t) => s + Number(t.amount || 0), 0)), [mode, incomeAll, txnsVisibleByMonth])
+  const expense = useMemo(() => (mode === 'all' ? expenseAll : txnsVisibleByMonth.filter((t) => t.type === 'expense').reduce((s, t) => s + Number(t.amount || 0), 0)), [mode, expenseAll, txnsVisibleByMonth])
   const balance = income - expense
 
   const categories = type === 'income' ? INCOME_CATS : EXPENSE_CATS
@@ -175,13 +195,16 @@ export default function App() {
     }, 260)
   }
 
+  // base list depends on current mode (all vs selected month)
+  const baseList = mode === 'all' ? txns : txnsVisibleByMonth
+
   const filtered = useMemo(() => {
     const needle = search.trim().toLowerCase()
-    return txns
+    return baseList
       .filter((t) => filter === 'all' || t.type === filter)
       .filter((t) => !needle || (t.desc || '').toLowerCase().includes(needle) || (t.category || '').toLowerCase().includes(needle))
       .sort((a, b) => (a.date === b.date ? b.id.localeCompare(a.id) : b.date.localeCompare(a.date)))
-  }, [txns, filter, search])
+  }, [baseList, filter, search])
 
   // theme toggle spin trigger
   const [spinAt, setSpinAt] = useState(0)
@@ -238,6 +261,27 @@ export default function App() {
             <div style={{ color: colors.muted, fontSize: 12, letterSpacing: 2, textTransform: 'uppercase' }}>Financial Dashboard</div>
             <h2 style={S.bigBalance} className={"" + (balance ? 'pulse' : '')} key={balance}>{fmt(balance)}</h2>
             <div style={{ color: colors.muted, fontSize: 13 }}>{balance < 0 ? 'Overspent' : 'Current balance'}</div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <div style={{ display: 'inline-flex', gap: 6, background: colors.card, border: `1px solid ${colors.border}`, padding: 6, borderRadius: 10 }}>
+              <button onClick={() => setMode('all')} style={{ padding: '8px 10px', borderRadius: 8, border: 'none', background: mode === 'all' ? colors.accent : 'transparent', color: mode === 'all' ? '#fff' : colors.muted }}>All Time</button>
+              <button onClick={() => setMode('month')} style={{ padding: '8px 10px', borderRadius: 8, border: 'none', background: mode === 'month' ? colors.accent : 'transparent', color: mode === 'month' ? '#fff' : colors.muted }}>Month</button>
+            </div>
+
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <select value={selectedMonth} onChange={(e) => setSelectedMonth(Number(e.target.value))} style={{ padding: '8px 10px', borderRadius: 8, border: `1px solid ${colors.border}`, background: colors.card, color: colors.text }}>
+                {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m, i) => (
+                  <option key={m} value={i+1}>{m}</option>
+                ))}
+              </select>
+              <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))} style={{ padding: '8px 10px', borderRadius: 8, border: `1px solid ${colors.border}`, background: colors.card, color: colors.text }}>
+                {Array.from({ length: 7 }).map((_, idx) => {
+                  const y = now.getFullYear() - 3 + idx
+                  return <option key={y} value={y}>{y}</option>
+                })}
+              </select>
+            </div>
           </div>
 
           <div style={S.toggleWrap}>
